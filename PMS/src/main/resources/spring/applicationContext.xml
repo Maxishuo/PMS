@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 采用注释的方式配置bean -->
+    <context:annotation-config/>
+    <!--扫描包加载实现类-->
+    <context:component-scan base-package="com.course.controller"/>
+    <context:component-scan base-package="com.course.service"/>
+
+
+    <context:component-scan base-package="com.course">
+        <!--排除controller扫描-->
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!-- 拦截器 demo -->
+    <!--    <bean id="methodInvokeInterceptor" class="com.course.interceptor.ScoreMethodInterceptor"/>-->
+
+    <aop:config>
+        <!--切入点,controller -->
+        <aop:pointcut id="pointcut_test"   expression="execution(* com.course.controller..*.*(..))" />
+        <!--<aop:pointcut id="pointcut_test" expression="execution(* com.course.controller.TestController.test())"/>-->
+        <!--在该切入点使用自定义拦截器 ,按照先后顺序执行 -->
+<!--        <aop:advisor pointcut-ref="pointcut_test" advice-ref="methodInvokeInterceptor" />-->
+    </aop:config>
+
+    <bean id="mapperScanner" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.course.mapper"/>
+    </bean>
+
+
+
+    <!--    &lt;!&ndash;配置数据源对象&ndash;&gt;-->
+    <!--    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
+    <!--        <property name="driverClass" value="${jdbc.driver}"></property>-->
+    <!--        <property name="jdbcUrl" value="${jdbc.url}"></property>-->
+    <!--        <property name="user" value="${jdbc.username}"></property>-->
+    <!--        <property name="password" value="${jdbc.password}"></property>-->
+    <!--    </bean>-->
+
+</beans>
